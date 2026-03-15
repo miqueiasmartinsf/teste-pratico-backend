@@ -1,4 +1,3 @@
-import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { compose } from '@adonisjs/core/helpers'
 import hash from '@adonisjs/core/services/hash'
@@ -10,30 +9,32 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   passwordColumnName: 'hashedPassword',
 })
 
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  FINANCE = 'FINANCE',
+  USER = 'USER',
+}
+
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  public id!: string
+  declare id: number
 
   @column()
-  public email!: string
+  declare email: string
 
   @column()
-  public name!: string
+  declare name: string
 
   @column({ serializeAs: null })
-  public hashedPassword!: string
+  declare hashedPassword: string
 
   @column()
-  public role!: string
+  declare role: UserRole
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  static accessTokens = DbAccessTokensProvider.forModel(User, {
-    expiresIn: '30 minutes',
-    table: 'auth_tokens',
-  })
 }
