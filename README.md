@@ -87,9 +87,9 @@ npm test
 | `DB_PORT` | Porta do MySQL | `3306` |
 | `DB_USER` | Usuário do MySQL | `root` |
 | `DB_PASSWORD` | Senha do MySQL | `secret` |
-| `DB_DATABASE` | Nome do banco | `betalent` |
+| `DB_DATABASE` | Nome do banco | `database_name` |
 | `GATEWAY1_URL` | URL do Gateway 1 | `http://localhost:3001` |
-| `GATEWAY1_EMAIL` | Email de autenticação do Gateway 1 | `dev@betalent.tech` |
+| `GATEWAY1_EMAIL` | Email de autenticação do Gateway 1 | `dev@database.tech` |
 | `GATEWAY1_TOKEN` | Token de autenticação do Gateway 1 | `FEC9BB...` |
 | `GATEWAY2_URL` | URL do Gateway 2 | `http://localhost:3002` |
 | `GATEWAY2_AUTH_TOKEN` | Header token do Gateway 2 | `tk_f219...` |
