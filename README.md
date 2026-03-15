@@ -1,4 +1,4 @@
-# BeTalent – Teste Prático Back-end
+Teste Prático Back-end
 
 Sistema gerenciador de pagamentos multi-gateway desenvolvido com **AdonisJS 7** (Node.js) + **MySQL**.
 
