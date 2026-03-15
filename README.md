@@ -71,6 +71,15 @@ Os testes utilizam **SQLite** automaticamente (sem precisar de MySQL):
 npm test
 ```
 
+### Documentação Swagger
+
+Com a aplicação rodando, a documentação fica disponível em:
+
+- `GET /api/v1/docs`
+- `GET /api/v1/docs/openapi.json`
+
+A interface HTML usa o Swagger UI via CDN e consome a spec OpenAPI exposta pela própria API.
+
 ---
 
 ## Variáveis de ambiente

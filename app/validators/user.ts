@@ -1,3 +1,4 @@
+import { USER_ROLES } from '#models/user'
 import vine from '@vinejs/vine'
 
 /**
@@ -5,7 +6,7 @@ import vine from '@vinejs/vine'
  */
 const email = () => vine.string().email().maxLength(254)
 const password = () => vine.string().minLength(8).maxLength(32)
-const role = () => vine.enum(['ADMIN', 'MANAGER', 'FINANCE', 'USER'] as const)
+const role = () => vine.enum(USER_ROLES)
 
 /**
  * Validator to use when performing self-signup

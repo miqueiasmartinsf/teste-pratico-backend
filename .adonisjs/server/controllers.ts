@@ -3,4 +3,13 @@
  * DO NOT EDIT manually
  */
 
-export const controllers = {}
+export const controllers = {
+  Auth: () => import('#controllers/auth_controller'),
+  Clients: () => import('#controllers/clients_controller'),
+  Docs: () => import('#controllers/docs_controller'),
+  Gateways: () => import('#controllers/gateways_controller'),
+  Products: () => import('#controllers/products_controller'),
+  Profile: () => import('#controllers/profile_controller'),
+  Transactions: () => import('#controllers/transactions_controller'),
+  Users: () => import('#controllers/users_controller'),
+}

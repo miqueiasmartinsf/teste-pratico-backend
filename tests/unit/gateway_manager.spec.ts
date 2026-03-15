@@ -1,48 +1,64 @@
 import { test } from '@japa/runner'
 import GatewayManagerService from '#services/gateway_manager_service'
 import Gateway from '#models/gateway'
-import testUtils from '@adonisjs/core/services/test_utils'
 
-test.group('GatewayManagerService', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+test.group('GatewayManagerService', () => {
+  const stubGatewayQuery = (gateways: Array<Pick<Gateway, 'id' | 'name'>>) => {
+    const originalQuery = Gateway.query
+
+    Gateway.query = ((() => {
+      const query = {
+        where: () => query,
+        orderBy: () => gateways,
+      }
+
+      return query
+    }) as unknown) as typeof Gateway.query
+
+    return () => {
+      Gateway.query = originalQuery
+    }
+  }
 
   test('should throw when no active gateways', async ({ assert }) => {
-    // No gateways in empty db
+    const restoreGatewayQuery = stubGatewayQuery([])
     const manager = new GatewayManagerService()
 
-    await assert.rejects(
-      () =>
-        manager.charge({
-          amount: 1000,
-          name: 'Tester',
-          email: 'tester@example.com',
-          cardNumber: '5569000000006063',
-          cvv: '010',
-        }),
-      /No active gateways/
-    )
+    try {
+      await assert.rejects(
+        () =>
+          manager.charge({
+            amount: 1000,
+            name: 'Tester',
+            email: 'tester@example.com',
+            cardNumber: '5569000000006063',
+            cvv: '010',
+          }),
+        /No active gateways/
+      )
+    } finally {
+      restoreGatewayQuery()
+    }
   })
 
   test('should try next gateway when first fails', async ({ assert }) => {
-    // Create two gateways - first one inactive
-    await Gateway.createMany([
-      { name: 'FakeGateway1', isActive: false, priority: 1 },
-      { name: 'FakeGateway2', isActive: true, priority: 2 },
-    ])
-
+    const restoreGatewayQuery = stubGatewayQuery([{ id: 2, name: 'FakeGateway2' } as Gateway])
     const manager = new GatewayManagerService()
 
-    // Both gateways are unknown to the service resolver, so it should throw
-    await assert.rejects(
-      () =>
-        manager.charge({
-          amount: 1000,
-          name: 'Tester',
-          email: 'tester@example.com',
-          cardNumber: '5569000000006063',
-          cvv: '010',
-        }),
-      /Unknown gateway|All gateways failed/
-    )
+    try {
+      await assert.rejects(
+        () =>
+          manager.charge({
+            amount: 1000,
+            name: 'Tester',
+            email: 'tester@example.com',
+            cardNumber: '5569000000006063',
+            cvv: '010',
+          }),
+        /Unknown gateway|All gateways failed/
+      )
+    } finally {
+      restoreGatewayQuery()
+    }
   })
 })

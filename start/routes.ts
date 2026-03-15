@@ -18,10 +18,14 @@ const ProductsController = () => import('#controllers/products_controller')
 const GatewaysController = () => import('#controllers/gateways_controller')
 const ClientsController = () => import('#controllers/clients_controller')
 const TransactionsController = () => import('#controllers/transactions_controller')
+const DocsController = () => import('#controllers/docs_controller')
 
 router
   .group(() => {
     // ─── Public Routes ────────────────────────────────────────────────────
+    router.get('docs', [DocsController, 'index'])
+    router.get('docs/openapi.json', [DocsController, 'openapi'])
+
     router
       .group(() => {
         router.post('register', [AuthController, 'register'])

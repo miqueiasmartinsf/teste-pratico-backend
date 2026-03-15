@@ -12,9 +12,31 @@
 
 process.env.NODE_ENV = 'test'
 
+import os from 'node:os'
 import 'reflect-metadata'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
 import { configure, processCLIArgs, run } from '@japa/runner'
+
+const originalNetworkInterfaces = os.networkInterfaces.bind(os)
+
+os.networkInterfaces = () => {
+  try {
+    return originalNetworkInterfaces()
+  } catch {
+    return {
+      lo: [
+        {
+          address: '127.0.0.1',
+          netmask: '255.0.0.0',
+          family: 'IPv4',
+          mac: '00:00:00:00:00:00',
+          internal: true,
+          cidr: '127.0.0.1/8',
+        },
+      ],
+    }
+  }
+}
 
 /**
  * URL to the application root. AdonisJS need it to resolve
